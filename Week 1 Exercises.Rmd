@@ -1,0 +1,40 @@
+---
+title: "Week 1 Exercises and Questions"
+author: "Mitchell"
+date: "June 28, 2019"
+output: html_document
+---
+Questions are **bolded**. 
+###Module 3: Sequences of Numbers
+```{r}
+myseq <- seq(5,10,length=30)
+myseq
+seq(along.with=my_seq)
+seq_along(my_seq)
+? `along.with= x`
+? `seq_along()`
+```
+**What is the actual function of 'along.with' and `seq_along` in the above code? Swirl never directly explained the code, and when I attempted to access the documentation, nothing came up.**
+ 
+`length()` describes length of vector within argument 
+`rep(a, times = b)` generates a vector containing all elements of `a` repeated `b` times
+`rep(a, each = b)` generates a vector containing all elements of a `a` repeated `b` times, one after another
+
+
+###Module 4: Vectors
+>Vectors come in two different flavors: atomic vectors and lists. An atomic vector contains exactly one data type, whereas a list may contain multiple data types... numeric vectors, which are one type of atomic vector. Other types of atomic vectors include logical, character, integer, and complex.
+
+`a <- b (logical argument such as >, <=, ==, or !=) c` creates a new logical vector `a` containing a series of logical values that compare every element in vector `b` with those of `c` as defined by the logical argument
+Logical operators include `|` for union; `&` for intersection; `!A` for negation of `A`. 
+
+`a <- c("a", "b", "c") creates a new character vector `a` with elements `"a"`, `"b"`, and `"c"`
+`paste(a, collapse = "q")` pushes all elements in `a` together to print a new character vector with length 1; between every element in `a`, the condition `q` is added
+*The paste function also changes all included numerical vectors into character vectors.
+`paste("a", "b", "c",..., sep = "q")` pushes `"a"`, `"b"`, `"c"`, etc. together to print a new character vector with length 1; between each element, the condition `q` is added
+ *If any of the combined vectors are of length greater than 1, the vectors will be combined in order in a pairwise fashion; in other words, vector recycling occurs. Example: 
+```{r}
+boy <- c("Big", "angry")
+paste("very", boy, sep = " ")
+```
+ 
+ 
