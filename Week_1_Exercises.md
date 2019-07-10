@@ -10,14 +10,54 @@ Questions are **bolded**.
 
 ### Module 3: Sequences of Numbers 
 
-```{r}
 
+```r
 my_seq <- seq(5,10,length=30)
 my_seq
+```
+
+```
+##  [1]  5.000000  5.172414  5.344828  5.517241  5.689655  5.862069  6.034483
+##  [8]  6.206897  6.379310  6.551724  6.724138  6.896552  7.068966  7.241379
+## [15]  7.413793  7.586207  7.758621  7.931034  8.103448  8.275862  8.448276
+## [22]  8.620690  8.793103  8.965517  9.137931  9.310345  9.482759  9.655172
+## [29]  9.827586 10.000000
+```
+
+```r
 seq(along.with=my_seq)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+## [24] 24 25 26 27 28 29 30
+```
+
+```r
 seq_along(my_seq)
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+## [24] 24 25 26 27 28 29 30
+```
+
+```r
 ? `along.with= x`
+```
+
+```
+## No documentation for 'along.with= x' in specified packages and libraries:
+## you could try '??along.with= x'
+```
+
+```r
 ? `seq_along()`
+```
+
+```
+## No documentation for 'seq_along()' in specified packages and libraries:
+## you could try '??seq_along()'
 ```
 
 **What is the actual function of 'along.with' and `seq_along` in the above code? Swirl never directly explained the code, and when I attempted to access the documentation, nothing came up.**  
@@ -36,9 +76,14 @@ seq_along(my_seq)
  * The paste function also changes all included numerical vectors into character vectors.
 * `paste("a", "b", "c",..., sep = "q")` pushes `"a"`, `"b"`, `"c"`, etc. together to print a new character vector with length 1; between each element, the condition `q` is added
  * If any of the combined vectors are of length greater than 1, the vectors will be combined in order in a pairwise fashion; in other words, vector recycling occurs. Example: 
-```{r}
+
+```r
 boy <- c("Big", "angry")
 paste("very", boy, sep = " ")
+```
+
+```
+## [1] "very Big"   "very angry"
 ```
 
 ###Module 5: Missing Values
@@ -48,21 +93,52 @@ NA can be substituted for a value in a numerical vector, creating a numerical va
 * `sample(a,n)` draws from the vector (or vectors) `a` n times and prints the result
 * `is.na(a)` assesses the numerical vector `a` for missing values and prints a new logical vector showing `TRUE` for each element of `a` that is missing, and vice versa for elements of `a` that are not missing  
 Some applications of the above coding elements: 
-```{r}
+
+```r
 pesty <- c(NA, 2,21,5, 19, 15, 16, 6, 8)
 sample_1 <- sample(pesty,5)
 sample_2 <- sample(pesty,5)
 sample_3 <- sample(pesty,5)
 is.na(sample_1)
+```
+
+```
+## [1] FALSE  TRUE FALSE FALSE FALSE
+```
+
+```r
 is.na(sample_2)
+```
+
+```
+## [1] FALSE FALSE FALSE  TRUE FALSE
+```
+
+```r
 is.na(sample_3)
+```
+
+```
+## [1] FALSE FALSE FALSE FALSE FALSE
 ```
 
 When `sum(a)` is applied to a logical vector `a`, it sums all TRUE (1) and FALSE (0), thus printing a result that is the number of TRUE.
 NaN is distinct from NA and represents a numerical value that is **not a number**. Examples include 
-```{r}
+
+```r
 0/0
+```
+
+```
+## [1] NaN
+```
+
+```r
 Inf-Inf
+```
+
+```
+## [1] NaN
 ```
 
 ### Module 6: Subsetting Vectors 
@@ -72,33 +148,91 @@ Inf-Inf
 * `a[b]` selects some particular elements from vector `a` defined by vector `b`, creating a subset. 
  * The vector `b` is called an index vector and can be a logical vector, a vector of negative or positive integers, or a vector of character strings.
  * When `b` is a logical vector, the printed result is a subset defined by the logical argument. For example: 
-```{r}
+
+```r
 big <- c(2,3,4,5,NA)
 big[big >= 3]
+```
+
+```
+## [1]  3  4  5 NA
+```
+
+```r
 big[is.na(big)]
+```
+
+```
+## [1] NA
+```
+
+```r
 bigger <- big[!is.na(big)]
 bigger[bigger>=3]
+```
+
+```
+## [1] 3 4 5
+```
+
+```r
 big[!is.na(big) &big>=3]
+```
+
+```
+## [1] 3 4 5
 ```
  
  * When `b` is a vector of positive integers, the printed result is a subset containing all entries of `a` that correspond to the positive integers. 
  * When `b` is a vector of negative integers, the printed result is a subset containing all entries of `a` that do not correspond to the negative integers. For example:   
-```{r}
+
+```r
 yup <- c(1,2,-3,-4)
 yup[1:3]
+```
+
+```
+## [1]  1  2 -3
+```
+
+```r
 yup[c(1,3)]
+```
+
+```
+## [1]  1 -3
+```
+
+```r
 yup[c(-1,-3)]
+```
+
+```
+## [1]  2 -4
+```
+
+```r
 yup[-c(1,3)]
+```
+
+```
+## [1]  2 -4
 ```
 
 * Naming vectors
  * `a <- c(a=b, c=d, e=f)` creates a new named vector. The vector is a numerical vector containing elements `b`, `d`, and `f` with names, respectively, `a`, `c`, and `e`. 
  * `names(a)` will then give the names corresponding to the elements of `a`. 
  * `names()` could also be used to add names to elements of a numerical vector. Observe:  
-```{r}
+
+```r
 yee <- c(1,2,3)
 names(yee) <- c("a", "b", "c")
 yee
+```
+
+```
+## a b c 
+## 1 2 3
 ```
 
 *`identical(a,b)` prints TRUE is `a` is identical to `b`
@@ -109,10 +243,16 @@ yee
 Matrices contain only a single class of data, while data frames can contain many different classes of data. 
 * `dim(a)` gives the dimensions of `a`, a matrix or data frame. Is essentially `length()` for tabular data. It prints rows, then columns.
  *It can also be used to add values to the dim __attribute__ of a vector, creating a data frame. The frame's attributes could then be evaluated using `attributes(a)`. Observe: 
-```{r}
+
+```r
 hey <- c(2,3)
 dim(hey) <- c(1,2)
 attributes(hey)
+```
+
+```
+## $dim
+## [1] 1 2
 ```
 
 Matrices could also be created using the `matrix()` command. Use `?matrix` to see more details. 
