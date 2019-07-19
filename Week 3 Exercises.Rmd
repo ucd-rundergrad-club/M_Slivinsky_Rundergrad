@@ -1,0 +1,74 @@
+---
+title: "Week 3 Exercises"
+author: "Mitchell"
+date: "July 17, 2019"
+output: 
+  html_document: 
+    keep_md: yes
+---
+``` {r}
+library(ggplot2)
+library(tidyverse)
+```
+
+Problem 1: The second line of code, which attempts to call the object `my_variable`, uses a non-dotted "i" instead of a normal, dotted i. Therefore, the called object does not exist and R returns an error message. 
+
+Problem 2: 
+```{r}
+library(tidyverse)
+```
+There is nothing wrong with this line of code. 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+There is nothing wrong with this code either. 
+```{r}
+filter(mpg, cyl == 8)
+filter(diamonds, carat > 3)
+```
+**I'm not sure what this R code is attempting to accomplish. The first line in this code works fine because it filters the data. The second line fails because it references variables not present in `mpg`. How can it be "tweaked" so it works as intended?**
+
+Problem 3: The command brings up a menu containing all R keyboard shortcuts. The same menu can be accessed with Help -> Keyboard Shortcuts Help. 
+
+Chapter 5: 
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+Chapter 5.2.4 Problems
+
+Problem 1.1, 1.4, 1.5, 1.7: 
+```{r}
+filter(flights, arr_delay >= 2)
+filter(flights, month == 7| month == 8| month == 9)
+filter(flights, dep_delay <= 0, arr_delay > 2)
+filter(flights, dep_time >= 0, dep_time <= 600)
+```
+
+Problem 2
+```{r}
+?between()
+```
+The command assesses whether the assigned values in a numeric vector fall within the specified range. It could be used to simplify some of the code already written; for example, the code from problems 1.4 and 1.7 could be rewritten 
+```{r}
+filter(flights, between(month, 7, 9))
+filter(flights, between(dep_time, 0, 600))
+```
+
+Problem 3
+```{r}
+summary(flights$dep_time)
+```
+8255 flights have a missing dep_time. **I don't know how to check and see what other variables are missing values (easily).**
+
+
+
+
+
+
+
+
+
+
