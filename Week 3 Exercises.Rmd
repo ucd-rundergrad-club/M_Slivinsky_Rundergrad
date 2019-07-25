@@ -6,6 +6,7 @@ output:
   html_document: 
     keep_md: yes
 ---
+###Chapter 4
 ``` {r}
 library(ggplot2)
 library(tidyverse)
@@ -31,7 +32,7 @@ filter(diamonds, carat > 3)
 
 Problem 3: The command brings up a menu containing all R keyboard shortcuts. The same menu can be accessed with Help -> Keyboard Shortcuts Help. 
 
-Chapter 5: 
+###Chapter 5: 
 ```{r}
 library(nycflights13)
 library(tidyverse)
@@ -63,12 +64,88 @@ summary(flights$dep_time)
 ```
 8255 flights have a missing dep_time. **I don't know how to check and see what other variables are missing values (easily).**
 
+Chapter 5.3.1 Problems 
 
+Problem 1
+```{r}
+frame <- tibble(x = c(2,-3, NA, 4, 5), y = c(2, 3, 4, 3, NA))
+frame
+arrange(frame, desc(is.na(x)))
+```
+The data sorts by descending order of is.na(x). The NA's get a value of 0, putting them at the top of this data frame. 
+**How come -3 is sorted between 2 and 4?**
 
+Problem 2
+```{r}
+arrange(flights, desc(dep_delay))
+arrange(flights, hour, minute)
+```
+The first command sorts for flights with the greatest delays; the second command sorts for flights with the earliest departures. 
 
+Problem 3
+```{r}
+arrange(flights, air_time)
+```
 
+Problem 4
+```{r}
+arrange(flights, desc(distance))
+arrange(flights, distance)
+```
+The first command shows flights that traveled the longest; the second shows flights that traveled the shortest. 
 
+Chapter 5.4.1 Problems 
 
+Problem 1: I brainstormed, I promise!
 
+Problem 2: 
+```{r}
+select(flights, dep_time)
+select(flights, dep_time, dep_time)
+```
+Nothing happens, R simply selects as if the variable were presented in the argument a single time. 
 
+Problem 3: 
+```{r}
+?one_of()
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+select(flights, one_of(vars))
+```
+Neato! `one_of()` is a select helper that matches variable names with elements of the supplied character vector. `vars` contains the names of five of our variables, so the `one_of()` selects the columns corresponding to those variables. 
+
+Problem 4: 
+```{r}
+select(flights, contains("TIME"))
+select(flights, sched_dep_time, contains("TIME"))
+```
+The result does not surprise me; the select helper selects all variable names containing "time", with variables that appear first being selected first by default. You could change the default, as in the second line of code, by simply selecting the name of the variable you wish to appear first before the `contains` helper. 
+
+Chapter 5.5.2 Exercises
+
+Problem 1: 
+```{r}
+transmute(flights, dep_time = ((dep_time %/% 100)*60) + dep_time %% 100, 
+          sched_dep_time = ((sched_dep_time %/% 100)*60) + sched_dep_time %% 100)
+```
+
+Problem 2: 
+```{r}
+fly <- mutate(flights, calc_air_time = arr_time - dep_time)
+select(fly, air_time, calc_air_time)
+```
+I expect to see the two times match; however, they do not, because arr_time and dep_time are expressed in format HHMM. Therefore the difference between the two numbers is not the true air time. The variables must first be converted to minutes since midnight, as in Problem 1. 
+
+Problem 3: 
+```{r}
+select(flights, dep_time, sched_dep_time, dep_delay)
+```
+Of course, the difference between scheduled departure time and the actual departure time in minutes is the delay in departure, dep_delay. Both dep_time and sched_dep_time are expressed in the same format (HHMM), so dep_delay, tabulated here, actually calculates the true difference between the times. 
+
+Problem 4: 
+```{r}
+arrange(flights, desc(dep_delay))
+```
+**What is the utility of using a ranking function to order the rows? `arrange()` works just fine, as illustrated here.**
+
+Problem 5: The code returns an error message; R doesn't like to add together vectors that aren't the same length. 
 

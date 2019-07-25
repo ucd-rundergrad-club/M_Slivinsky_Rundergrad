@@ -6,6 +6,7 @@ output:
   html_document: 
     keep_md: yes
 ---
+###Chapter 4
 
 ```r
 library(ggplot2)
@@ -17,7 +18,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages -------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
+## -- Attaching packages --------------------------------------------------------------------------------------------------- tidyverse 1.2.1 --
 ```
 
 ```
@@ -48,7 +49,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Conflicts ----------------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## -- Conflicts ------------------------------------------------------------------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -115,7 +116,7 @@ filter(diamonds, carat > 3)
 
 Problem 3: The command brings up a menu containing all R keyboard shortcuts. The same menu can be accessed with Help -> Keyboard Shortcuts Help. 
 
-Chapter 5: 
+###Chapter 5: 
 
 ```r
 library(nycflights13)
@@ -300,12 +301,392 @@ summary(flights$dep_time)
 ```
 8255 flights have a missing dep_time. **I don't know how to check and see what other variables are missing values (easily).**
 
+Chapter 5.3.1 Problems 
 
+Problem 1
 
+```r
+frame <- tibble(x = c(2,-3, NA, 4, 5), y = c(2, 3, 4, 3, NA))
+frame
+```
 
+```
+## # A tibble: 5 x 2
+##       x     y
+##   <dbl> <dbl>
+## 1     2     2
+## 2    -3     3
+## 3    NA     4
+## 4     4     3
+## 5     5    NA
+```
 
+```r
+arrange(frame, desc(is.na(x)))
+```
 
+```
+## # A tibble: 5 x 2
+##       x     y
+##   <dbl> <dbl>
+## 1    NA     4
+## 2     2     2
+## 3    -3     3
+## 4     4     3
+## 5     5    NA
+```
+The data sorts by descending order of is.na(x). The NA's get a value of 0, putting them at the top of this data frame. 
+**How come -3 is sorted between 2 and 4?**
 
+Problem 2
 
+```r
+arrange(flights, desc(dep_delay))
+```
 
+```
+## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
+##  1  2013     1     9      641            900      1301     1242
+##  2  2013     6    15     1432           1935      1137     1607
+##  3  2013     1    10     1121           1635      1126     1239
+##  4  2013     9    20     1139           1845      1014     1457
+##  5  2013     7    22      845           1600      1005     1044
+##  6  2013     4    10     1100           1900       960     1342
+##  7  2013     3    17     2321            810       911      135
+##  8  2013     6    27      959           1900       899     1236
+##  9  2013     7    22     2257            759       898      121
+## 10  2013    12     5      756           1700       896     1058
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
+## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
+## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
+## #   minute <dbl>, time_hour <dttm>
+```
+
+```r
+arrange(flights, hour, minute)
+```
+
+```
+## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
+##  1  2013     7    27       NA            106        NA       NA
+##  2  2013     1     2      458            500        -2      703
+##  3  2013     1     3      458            500        -2      650
+##  4  2013     1     4      456            500        -4      631
+##  5  2013     1     5      458            500        -2      640
+##  6  2013     1     6      458            500        -2      718
+##  7  2013     1     7      454            500        -6      637
+##  8  2013     1     8      454            500        -6      625
+##  9  2013     1     9      457            500        -3      647
+## 10  2013     1    10      450            500       -10      634
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
+## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
+## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
+## #   minute <dbl>, time_hour <dttm>
+```
+The first command sorts for flights with the greatest delays; the second command sorts for flights with the earliest departures. 
+
+Problem 3
+
+```r
+arrange(flights, air_time)
+```
+
+```
+## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
+##  1  2013     1    16     1355           1315        40     1442
+##  2  2013     4    13      537            527        10      622
+##  3  2013    12     6      922            851        31     1021
+##  4  2013     2     3     2153           2129        24     2247
+##  5  2013     2     5     1303           1315       -12     1342
+##  6  2013     2    12     2123           2130        -7     2211
+##  7  2013     3     2     1450           1500       -10     1547
+##  8  2013     3     8     2026           1935        51     2131
+##  9  2013     3    18     1456           1329        87     1533
+## 10  2013     3    19     2226           2145        41     2305
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
+## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
+## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
+## #   minute <dbl>, time_hour <dttm>
+```
+
+Problem 4
+
+```r
+arrange(flights, desc(distance))
+```
+
+```
+## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
+##  1  2013     1     1      857            900        -3     1516
+##  2  2013     1     2      909            900         9     1525
+##  3  2013     1     3      914            900        14     1504
+##  4  2013     1     4      900            900         0     1516
+##  5  2013     1     5      858            900        -2     1519
+##  6  2013     1     6     1019            900        79     1558
+##  7  2013     1     7     1042            900       102     1620
+##  8  2013     1     8      901            900         1     1504
+##  9  2013     1     9      641            900      1301     1242
+## 10  2013     1    10      859            900        -1     1449
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
+## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
+## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
+## #   minute <dbl>, time_hour <dttm>
+```
+
+```r
+arrange(flights, distance)
+```
+
+```
+## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
+##  1  2013     7    27       NA            106        NA       NA
+##  2  2013     1     3     2127           2129        -2     2222
+##  3  2013     1     4     1240           1200        40     1333
+##  4  2013     1     4     1829           1615       134     1937
+##  5  2013     1     4     2128           2129        -1     2218
+##  6  2013     1     5     1155           1200        -5     1241
+##  7  2013     1     6     2125           2129        -4     2224
+##  8  2013     1     7     2124           2129        -5     2212
+##  9  2013     1     8     2127           2130        -3     2304
+## 10  2013     1     9     2126           2129        -3     2217
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
+## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
+## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
+## #   minute <dbl>, time_hour <dttm>
+```
+The first command shows flights that traveled the longest; the second shows flights that traveled the shortest. 
+
+Chapter 5.4.1 Problems 
+
+Problem 1: I brainstormed, I promise!
+
+Problem 2: 
+
+```r
+select(flights, dep_time)
+```
+
+```
+## # A tibble: 336,776 x 1
+##    dep_time
+##       <int>
+##  1      517
+##  2      533
+##  3      542
+##  4      544
+##  5      554
+##  6      554
+##  7      555
+##  8      557
+##  9      557
+## 10      558
+## # ... with 336,766 more rows
+```
+
+```r
+select(flights, dep_time, dep_time)
+```
+
+```
+## # A tibble: 336,776 x 1
+##    dep_time
+##       <int>
+##  1      517
+##  2      533
+##  3      542
+##  4      544
+##  5      554
+##  6      554
+##  7      555
+##  8      557
+##  9      557
+## 10      558
+## # ... with 336,766 more rows
+```
+Nothing happens, R simply selects as if the variable were presented in the argument a single time. 
+
+Problem 3: 
+
+```r
+?one_of()
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+select(flights, one_of(vars))
+```
+
+```
+## # A tibble: 336,776 x 5
+##     year month   day dep_delay arr_delay
+##    <int> <int> <int>     <dbl>     <dbl>
+##  1  2013     1     1         2        11
+##  2  2013     1     1         4        20
+##  3  2013     1     1         2        33
+##  4  2013     1     1        -1       -18
+##  5  2013     1     1        -6       -25
+##  6  2013     1     1        -4        12
+##  7  2013     1     1        -5        19
+##  8  2013     1     1        -3       -14
+##  9  2013     1     1        -3        -8
+## 10  2013     1     1        -2         8
+## # ... with 336,766 more rows
+```
+Neato! `one_of()` is a select helper that matches variable names with elements of the supplied character vector. `vars` contains the names of five of our variables, so the `one_of()` selects the columns corresponding to those variables. 
+
+Problem 4: 
+
+```r
+select(flights, contains("TIME"))
+```
+
+```
+## # A tibble: 336,776 x 6
+##    dep_time sched_dep_time arr_time sched_arr_time air_time
+##       <int>          <int>    <int>          <int>    <dbl>
+##  1      517            515      830            819      227
+##  2      533            529      850            830      227
+##  3      542            540      923            850      160
+##  4      544            545     1004           1022      183
+##  5      554            600      812            837      116
+##  6      554            558      740            728      150
+##  7      555            600      913            854      158
+##  8      557            600      709            723       53
+##  9      557            600      838            846      140
+## 10      558            600      753            745      138
+## # ... with 336,766 more rows, and 1 more variable: time_hour <dttm>
+```
+
+```r
+select(flights, sched_dep_time, contains("TIME"))
+```
+
+```
+## # A tibble: 336,776 x 6
+##    sched_dep_time dep_time arr_time sched_arr_time air_time
+##             <int>    <int>    <int>          <int>    <dbl>
+##  1            515      517      830            819      227
+##  2            529      533      850            830      227
+##  3            540      542      923            850      160
+##  4            545      544     1004           1022      183
+##  5            600      554      812            837      116
+##  6            558      554      740            728      150
+##  7            600      555      913            854      158
+##  8            600      557      709            723       53
+##  9            600      557      838            846      140
+## 10            600      558      753            745      138
+## # ... with 336,766 more rows, and 1 more variable: time_hour <dttm>
+```
+The result does not surprise me; the select helper selects all variable names containing "time", with variables that appear first being selected first by default. You could change the default, as in the second line of code, by simply selecting the name of the variable you wish to appear first before the `contains` helper. 
+
+Chapter 5.5.2 Exercises
+
+Problem 1: 
+
+```r
+transmute(flights, dep_time = ((dep_time %/% 100)*60) + dep_time %% 100, 
+          sched_dep_time = ((sched_dep_time %/% 100)*60) + sched_dep_time %% 100)
+```
+
+```
+## # A tibble: 336,776 x 2
+##    dep_time sched_dep_time
+##       <dbl>          <dbl>
+##  1      317            315
+##  2      333            329
+##  3      342            340
+##  4      344            345
+##  5      354            360
+##  6      354            358
+##  7      355            360
+##  8      357            360
+##  9      357            360
+## 10      358            360
+## # ... with 336,766 more rows
+```
+
+Problem 2: 
+
+```r
+fly <- mutate(flights, calc_air_time = arr_time - dep_time)
+select(fly, air_time, calc_air_time)
+```
+
+```
+## # A tibble: 336,776 x 2
+##    air_time calc_air_time
+##       <dbl>         <int>
+##  1      227           313
+##  2      227           317
+##  3      160           381
+##  4      183           460
+##  5      116           258
+##  6      150           186
+##  7      158           358
+##  8       53           152
+##  9      140           281
+## 10      138           195
+## # ... with 336,766 more rows
+```
+I expect to see the two times match; however, they do not, because arr_time and dep_time are expressed in format HHMM. Therefore the difference between the two numbers is not the true air time. The variables must first be converted to minutes since midnight, as in Problem 1. 
+
+Problem 3: 
+
+```r
+select(flights, dep_time, sched_dep_time, dep_delay)
+```
+
+```
+## # A tibble: 336,776 x 3
+##    dep_time sched_dep_time dep_delay
+##       <int>          <int>     <dbl>
+##  1      517            515         2
+##  2      533            529         4
+##  3      542            540         2
+##  4      544            545        -1
+##  5      554            600        -6
+##  6      554            558        -4
+##  7      555            600        -5
+##  8      557            600        -3
+##  9      557            600        -3
+## 10      558            600        -2
+## # ... with 336,766 more rows
+```
+Of course, the difference between scheduled departure time and the actual departure time in minutes is the delay in departure, dep_delay. Both dep_time and sched_dep_time are expressed in the same format (HHMM), so dep_delay, tabulated here, actually calculates the true difference between the times. 
+
+Problem 4: 
+
+```r
+arrange(flights, desc(dep_delay))
+```
+
+```
+## # A tibble: 336,776 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
+##  1  2013     1     9      641            900      1301     1242
+##  2  2013     6    15     1432           1935      1137     1607
+##  3  2013     1    10     1121           1635      1126     1239
+##  4  2013     9    20     1139           1845      1014     1457
+##  5  2013     7    22      845           1600      1005     1044
+##  6  2013     4    10     1100           1900       960     1342
+##  7  2013     3    17     2321            810       911      135
+##  8  2013     6    27      959           1900       899     1236
+##  9  2013     7    22     2257            759       898      121
+## 10  2013    12     5      756           1700       896     1058
+## # ... with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
+## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
+## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
+## #   minute <dbl>, time_hour <dttm>
+```
+**What is the utility of using a ranking function to order the rows? `arrange()` works just fine, as illustrated here.**
+
+Problem 5: The code returns an error message; R doesn't like to add together vectors that aren't the same length. 
 
