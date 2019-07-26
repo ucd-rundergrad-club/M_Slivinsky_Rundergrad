@@ -306,7 +306,7 @@ Chapter 5.3.1 Problems
 Problem 1
 
 ```r
-frame <- tibble(x = c(2,-3, NA, 4, 5), y = c(2, 3, 4, 3, NA))
+frame <- tibble(x = c(2, NA, 4, 5, -3), y = c(2, 3, 4, 3, NA))
 frame
 ```
 
@@ -315,10 +315,10 @@ frame
 ##       x     y
 ##   <dbl> <dbl>
 ## 1     2     2
-## 2    -3     3
-## 3    NA     4
-## 4     4     3
-## 5     5    NA
+## 2    NA     3
+## 3     4     4
+## 4     5     3
+## 5    -3    NA
 ```
 
 ```r
@@ -329,11 +329,11 @@ arrange(frame, desc(is.na(x)))
 ## # A tibble: 5 x 2
 ##       x     y
 ##   <dbl> <dbl>
-## 1    NA     4
+## 1    NA     3
 ## 2     2     2
-## 3    -3     3
-## 4     4     3
-## 5     5    NA
+## 3     4     4
+## 4     5     3
+## 5    -3    NA
 ```
 The data sorts by descending order of is.na(x). The NA's get a value of 0, putting them at the top of this data frame. 
 **How come -3 is sorted between 2 and 4?**

@@ -68,7 +68,7 @@ Chapter 5.3.1 Problems
 
 Problem 1
 ```{r}
-frame <- tibble(x = c(2,-3, NA, 4, 5), y = c(2, 3, 4, 3, NA))
+frame <- tibble(x = c(2, NA, 4, 5, -3), y = c(2, 3, 4, 3, NA))
 frame
 arrange(frame, desc(is.na(x)))
 ```
