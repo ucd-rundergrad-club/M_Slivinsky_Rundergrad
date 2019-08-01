@@ -1,0 +1,160 @@
+---
+title: "Week 4 Exercises"
+author: "Mitchell"
+date: "July 31, 2019"
+output: html_document
+---
+##Week 4 Exercises
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+###7.3.4 Exercises
+
+Problem 1
+Looking at x distribution: 
+```{r}
+?diamonds
+ggplot(diamonds) + geom_histogram(mapping = aes(x = x), binwidth = 0.5)
+ggplot(diamonds) +geom_histogram(mapping = aes(x = x), binwidth = 0.5) + coord_cartesian(ylim = c(0,10))
+ggplot(diamonds) +geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+ggplot(diamonds) +geom_histogram(mapping = aes(x = y), binwidth = 0.5) + coord_cartesian(ylim = c(0,10))
+ggplot(diamonds) +geom_histogram(mapping = aes(x = z), binwidth = 0.5)
+ggplot(diamonds) +geom_histogram(mapping = aes(x = z), binwidth = 0.5) + coord_cartesian(ylim = c(0,10))
+
+```
+
+From the help page for `diamonds`, I can clearly observe that `x` represents the diamond's length in mm, `y` represents the diamond's width in mm, and `z` represents the diamond's depth in mm. The above graphs indicate that x has a very limited range, with most diamonds having length of roughly 6-7mm; however, and handful of diamonds lack a length measurement. Likewise, the width and depth of the diamonds tends to cluster around the median value, but have a few outliers with either no entry or abnormally high entries. 
+
+Problem 2
+```{r}
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 2000)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 1000)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 500)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 100)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 10)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 1)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 1) + coord_cartesian(xlim = c(0,2000))
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 10) + coord_cartesian(xlim = c(0,500),ylim = c(0,10))
+```
+
+All the diamonds' costs are relatively low considering the size of the data set; although the diamonds range in value up to almost 20,000, most cost roughly 500-1000. No diamonds cost nothing; all cost something. The cost of the diamonds appears not to follow a uniform distribution. Instead, some prices are far more common among the diamonds than other, even nearby costs. 
+
+Problem 3
+```{r}
+filter(diamonds, carat == 0.99 | carat == 1) %>%
+  count(carat)
+```
+23 diamonds are 0.99 carats, 1,558 diamonds are 1 carat. Most likely, integer-valued diamonds are preferred, perhaps because they sell better. 
+
+Problem 4
+```{r}
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price))
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 500)
+```
+
+Apparently, ggplot chooses `binwidth = 30` when binwidth is not provided. 
+
+```{r}
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price)) + coord_cartesian(xlim = c(0,5000))
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price)) + xlim(c(0,5000))
+```
+
+**I'm not sure exactly why these two graphs look different. What is happening that is causing the graph using `xlim` in `ggplot` to look so different?** Clearly, the function removes values, including missing values, that do not lie within the specified range. 
+```{r}
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 10000)
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price), binwidth = 10000) + coord_cartesian(xlim = c(6000,10000))
+```
+
+**What is supposed to happen here? It looks like the function continues to show the bar, even when the range containing it has been cut in half.**
+
+###7.4.1 Exercises
+
+Problem 1
+```{r}
+p.tibble <- tibble(x = c(seq(from = 1, to = 10, by = 0.5), NA, NA, NA, NA, 2, 5, 7, 8, 4, 5, 4))
+y <- c(seq(from = 3, length = length(p.tibble$x)))
+p.tibble
+mutate(p.tibble, y = y)
+ggplot(p.tibble) + geom_histogram(mapping = aes(x = x))
+new.tibble <- tibble(x = c(1, 2, 3, NA), y = c("big", "angry", "red", NA))
+ggplot(new.tibble) + geom_bar(mapping = aes(x = y))
+```
+
+In a histogram, NA's are dropped by default; however, in a barplot, missing values are kept (particularly when plotting counts of categorical variables). 
+
+Problem 2
+```{r}
+se = c(1,2,3,4,5,NA)
+mean(se)
+mean(se, na.rm = TRUE)
+sum(se)
+sum(se, na.rm = TRUE)
+```
+Checking `na.rm = TRUE` allows missing values to be ignored when using the commands to make calculations. When the command is absent, NA's are included in the calculations, resulting in a print of `NA`. 
+
+###7.5.1.1 Problems 
+
+Problem 1 
+
+From the book: 
+```{r}
+nycflights13::flights %>% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) %>% 
+  ggplot(mapping = aes(sched_dep_time, y = ..density..)) + 
+    geom_freqpoly(mapping = aes(colour = cancelled), binwidth = 1/4)
+```
+
+**It looks a lot better, but what is this "density"? The book didn't exactly do a great job of explaining what the density argument does, aside from making the graphs look prettier.**
+
+Problem 2
+```{r}
+?diamonds
+ggplot(diamonds) + geom_point(mapping = aes(x = carat, y = price))
+ggplot(diamonds) + geom_boxplot(mapping = aes(x = reorder(cut, price, FUN = median), y = price))
+ggplot(diamonds) + geom_boxplot(mapping = aes(x = reorder(color, price, FUN = median), y = price))
+ggplot(diamonds) + geom_boxplot(mapping = aes(x = reorder(clarity, price, FUN = median), y = price))
+ggplot(diamonds) + geom_boxplot(mapping = aes(x = reorder(cut, carat, FUN = median), y = carat))
+
+```
+
+`carat` seems to be the most important variable for predicting the price of a diamond. The lower a diamond's cut, the larger its carat value; therefore, worse-cut diamonds cost less. 
+
+Problem 3
+```{r}
+library(ggstance)
+ggplot(diamonds) + geom_boxplot(mapping = aes(x = reorder(clarity, price, FUN = median), y = price)) + coord_flip()
+ggplot(diamonds) + geom_boxploth(mapping = aes(x = price, y =reorder(clarity, price, FUN = median)))
+```
+
+Although the generated plots are the same, the code used to create them is different; when using `boxploth`, a true horizontal boxplot is created (unlike using `coord_flip()`, which flips a verticla boxplot). 
+
+Problem 5
+
+```{r}
+ggplot(diamonds) + geom_violin(mapping = aes(x = cut, y = price))
+ggplot(diamonds) + geom_freqpoly(mapping = aes(x = price, color = cut))
+ggplot(diamonds) + geom_histogram(mapping = aes(x = price)) + facet_wrap(nrow = 2, ~cut)
+```
+`geom_violin` is essentially a histogram, except that it represents the distribution of data by size rather than lines representing the quartiles. `geom_histogram` allows the direct comparison of many different values of data on the same graph, but risks losing information when one data set is small relative to the others. Faceting the data using `facet_wrap` recovers some of this information, but permits less direct comparisons between the data. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
